@@ -8,6 +8,7 @@ config:
   totalDeposits: 65536
   perSlot: 128
   startSlot: 0 # asap
+  invalidSigPercent: 0 # 0-100: random percent of deposits with corrupted signatures
 
 tasks:
 - name: check_clients_are_healthy
@@ -50,4 +51,5 @@ tasks:
     limitTotal: totalDeposits
     limitPerSlot: perSlot
     indexCount: totalDeposits
+    invalidSigPercent: invalidSigPercent
     withdrawalCredentials: '| "0x03" + ("00" * 11) + (.tasks.test_wallet.outputs.childWallet.address | ltrimstr("0x"))'
