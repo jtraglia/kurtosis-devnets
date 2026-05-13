@@ -29,7 +29,8 @@ assertoor_params:
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "http://host.docker.internal:8765/assertoor-playbooks/builder-deposits.yml"
+    #- file: "http://host.docker.internal:8765/assertoor-playbooks/builder-deposits.yml"
+    - file: "https://raw.githubusercontent.com/jtraglia/kurtosis-devnets/refs/heads/master/assertoor-playbooks/builder-deposits.yml"
       config:
         totalDeposits: 32768
         perSlot: 2048
