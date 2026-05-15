@@ -20,25 +20,25 @@ network_params:
   gloas_fork_epoch: 1
   withdrawal_type: "0x01"
   validator_balance: 40000
-  gas_limit: 1000000000
-  genesis_gaslimit: 1000000000
+  gas_limit: 250000000
+  genesis_gaslimit: 250000000
 
 additional_services:
   - dora
   - assertoor
 
+# kurtosis config snippet
 assertoor_params:
-  image: jtraglia/assertoor:invalid-sig-percent
+  image: ethpandaops/assertoor:master
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    #- file: "http://host.docker.internal:8765/assertoor-playbooks/builder-deposits.yml"
-    - file: "https://raw.githubusercontent.com/jtraglia/kurtosis-devnets/refs/heads/master/assertoor-playbooks/builder-deposits.yml"
+    - file: "https://raw.githubusercontent.com/ethpandaops/assertoor/refs/heads/master/playbooks/gloas-dev/builder-deposit-spam.yaml"
       config:
-        totalDeposits: 40960
-        perSlot: 8192
-        startSlot: 33
-        invalidSigPercent: 1
+        batchSize: 256
+        pendingBatches: 32 # 8192 deposits per block
+        totalDeposits: 1000000
+        skipForkActivationCheck: false
 
 dora_params:
   image: ethpandaops/dora:master
