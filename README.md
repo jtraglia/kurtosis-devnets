@@ -18,5 +18,5 @@ python3 -m http.server 8765
 2. Launch the devnet.
 
 ```
-kurtosis clean -a && kurtosis run --enclave devnet github.com/ethpandaops/ethereum-package --args-file <path-to-kurtosis-config>
+kurtosis clean -a && kurtosis run --enclave devnet github.com/ethpandaops/ethereum-package --args-file <path-to-kurtosis-config> --image-download always
 ```
