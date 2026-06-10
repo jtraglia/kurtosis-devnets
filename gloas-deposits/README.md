@@ -11,3 +11,5 @@
 | s5 | Floods the queue with 50k invalid 0x01 validator deposits for one pubkey, then sends one valid 0x03 builder deposit for that same pubkey. |
 | s6 | Sends 50k invalid 0x01 validator deposits for one pubkey, then a valid 0x01 validator deposit that onboards it, then a valid 0x03 builder deposit that should fold in as a top-up rather than create a builder. |
 | s7 | Like s3 but pre-fills the queue before the fork with 50k invalid 0x01 validator deposits for one pubkey (each a distinct invalid signature) followed by one valid 0x03 builder deposit for that pubkey. |
+| s8 | Like s5 but the final deposit is invalid: 50k invalid 0x01 validator deposits for one pubkey followed by a single invalid 0x03 builder deposit, all burned (no builder onboarded). |
+| s9 | Like s8 but instead of one final invalid builder deposit, sends invalid 0x03 builder deposits for the same pubkey at one per slot, sustained, to probe per-slot processing cost. |
