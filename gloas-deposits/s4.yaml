@@ -1,9 +1,9 @@
-# Scenario 3: pre-fork pending_deposits queue with same-pubkey builder deposits.
-# All submitted in epoch 0, BEFORE the GLOAS fork, in this order:
-#   1. invalidBuilderDeposits invalid 0x03 deposits, all for ONE pubkey
-#   2. one valid 0x03 deposit for that same pubkey
-# At the fork the backlog is processed: invalid same-pubkey deposits burn,
-# the valid one onboards the builder. ETH burned scales with invalidBuilderDeposits.
+# Scenario 4: Invalid validator deposits then a valid builder, in one payload.
+# Targets ONE pubkey with 5000 invalid 0x01 validator deposits followed by a
+# single valid 0x03 builder deposit (5001 total, under the per-block limit, so
+# the whole set aims to land in a single payload). The validator deposits are
+# burned as they process; the valid builder deposit onboards the builder for
+# that same pubkey.
 
 participants_matrix:
   el:
@@ -31,13 +31,14 @@ assertoor_params:
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-same-pubkey-spam.yaml"
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/deposits/s4.yaml"
       config:
-        invalidBuilderDeposits: 50000  # invalid 0x03 deposits for one pubkey
+        validatorDeposits: 5000
         batchSize: 220
-        pendingBatches: 32             # ~8192 deposits per block
+        pendingBatches: 32
         perSlot: 8192
         depositAmount: 1
+        skipForkActivationCheck: false
 
 dora_params:
   image: ethpandaops/dora:master

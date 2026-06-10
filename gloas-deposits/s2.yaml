@@ -1,7 +1,9 @@
-# Make many 2048 deposits per slot before the Gloas upgrade at epoch 1.
-# This should result in many (~32k) builders onboarded at the fork.
-# There might be issues validating all of these signatures at the fork.
-# Note: deposits will not start immediately, it takes time to generate keys.
+# Scenario 2: Mass builder onboarding at the fork.
+# Spams valid 0x03 builder deposits with unique pubkeys before Gloas activates
+# (~2048 per slot), building a large backlog so that ~32k builders are
+# onboarded in the first slots after the fork. Stresses signature validation of
+# a large batch of valid deposits right at the transition. Note: deposit
+# generation takes a few slots to spin up, so start the run well before epoch 1.
 
 participants_matrix:
   el:

@@ -1,6 +1,9 @@
-# Make lots of new builder deposits in Gloas.
-# Clients should be able to handle ~200m gas worth of deposits per slot, indefinitely.
-# Note it will take several slots to generate the deposits, which are done at initialization.
+# Scenario 1: Sustained bulk builder onboarding.
+# Spams valid 0x03 builder deposits with unique pubkeys at a high rate
+# (~8192 deposits per block, roughly 200M gas/slot) and keeps it up
+# indefinitely. Every deposit onboards a new builder, so the ETH is recycled
+# rather than burned. Verifies clients sustain the deposit throughput and stay
+# final. Note: deposit generation takes a few slots to spin up at the start.
 
 participants_matrix:
   el:
@@ -10,12 +13,6 @@ participants_matrix:
   cl:
     - cl_type: prysm
       cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
-    #- cl_type: lodestar
-    #  cl_image: tuyennhv/lodestar:te-improve_onboard_builders
-    #- cl_type: teku
-    #  cl_image: ethpandaops/teku:glamsterdam-devnet-2
-    #- cl_type: lighthouse
-    #  cl_image: ethpandaops/lighthouse:pawanjay176-builder-deposits-optimisation
   count: 1
 
 network_params:
@@ -29,7 +26,6 @@ additional_services:
   - dora
   - assertoor
 
-# kurtosis config snippet
 assertoor_params:
   image: ethpandaops/assertoor:master
   run_stability_check: false

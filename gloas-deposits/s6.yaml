@@ -1,9 +1,10 @@
-# Scenario 4: invalid 0x01 validator deposits then a valid 0x03 builder, same pubkey.
-# Targets ONE pubkey with 5000 validator (0x01) deposits carrying invalid
-# signatures, submitted first, then a single valid builder (0x03) deposit for
-# the same pubkey. The 5000 validator deposits are burned; the builder is
-# onboarded. 5000 + 1 == 5001 fits within the per-block deposit limit (8192),
-# so the whole set aims to land in one payload.
+# Scenario 6: Builder deposit to an already-onboarded validator.
+# Drives ONE pubkey through three stages: 50k invalid 0x01 validator deposits
+# (burned), then 1 valid 0x01 validator deposit that onboards the pubkey as a
+# regular validator, then 1 valid 0x03 builder deposit for that same pubkey.
+# Because the pubkey is already a validator by then, the builder deposit should
+# be treated as a balance top-up (signature skipped, credentials ignored) — it
+# should NOT convert the validator into a builder.
 
 participants_matrix:
   el:
@@ -31,11 +32,11 @@ assertoor_params:
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-mixed-creds.yaml"
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/deposits/s6.yaml"
       config:
-        validatorDeposits: 5000
+        invalidValidatorDeposits: 50000
         batchSize: 220
-        pendingBatches: 32      # ~8192 deposits per block
+        pendingBatches: 32
         perSlot: 8192
         depositAmount: 1
         skipForkActivationCheck: false
