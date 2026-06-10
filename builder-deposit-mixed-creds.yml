@@ -1,0 +1,43 @@
+# Scenario 4: invalid 0x01 validator deposits then a valid 0x03 builder, same pubkey.
+# Targets ONE pubkey with 8191 validator (0x01) deposits carrying invalid
+# signatures, submitted first, then a single valid builder (0x03) deposit for
+# the same pubkey. The 8191 validator deposits are burned; the builder is
+# onboarded. 8191 + 1 == 8192 targets the per-block deposit limit (one payload).
+
+participants_matrix:
+  el:
+    - el_type: geth
+      el_image: ethpandaops/geth:bal-devnet-6
+      el_extra_params: ["--rpc.txfeecap=0", "--rpc.gascap=0"]
+  cl:
+    - cl_type: prysm
+      cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
+  count: 1
+
+network_params:
+  gloas_fork_epoch: 1
+  withdrawal_type: "0x01"
+  validator_balance: 40000
+  gas_limit: 250000000
+  genesis_gaslimit: 250000000
+
+additional_services:
+  - dora
+  - assertoor
+
+assertoor_params:
+  image: jtraglia/assertoor:reuse-index
+  run_stability_check: false
+  run_block_proposal_check: false
+  tests:
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-mixed-creds.yaml"
+      config:
+        validatorDeposits: 8191
+        batchSize: 220
+        pendingBatches: 32      # ~8192 deposits per block
+        perSlot: 8192
+        depositAmount: 1
+        skipForkActivationCheck: false
+
+dora_params:
+  image: ethpandaops/dora:master

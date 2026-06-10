@@ -2,17 +2,11 @@
 
 ## Usage
 
-0. Clone the repository.
+1. Clone the repository.
 
 ```
 git clone git@github.com:jtraglia/kurtosis-devnets.git
 cd kurtosis-devnets
-```
-
-1. If testing local changes, serve the assertoor playbooks.
-
-```
-python3 -m http.server 8765
 ```
 
 2. Launch the devnet.

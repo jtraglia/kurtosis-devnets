@@ -1,0 +1,43 @@
+# Scenario 3: spam invalid same-pubkey builder deposits, then one valid.
+# Fills pending_deposits with N invalid-signature 0x03 deposits that all
+# target ONE pubkey (each with a different invalid sig), then submits a single
+# valid 0x03 deposit for that pubkey. The invalid deposits are burned; the
+# valid one onboards the builder. ETH burned scales with `invalidDeposits`.
+
+participants_matrix:
+  el:
+    - el_type: geth
+      el_image: ethpandaops/geth:bal-devnet-6
+      el_extra_params: ["--rpc.txfeecap=0", "--rpc.gascap=0"]
+  cl:
+    - cl_type: prysm
+      cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
+  count: 1
+
+network_params:
+  gloas_fork_epoch: 1
+  withdrawal_type: "0x01"
+  validator_balance: 40000
+  gas_limit: 250000000
+  genesis_gaslimit: 250000000
+
+additional_services:
+  - dora
+  - assertoor
+
+assertoor_params:
+  image: jtraglia/assertoor:reuse-index
+  run_stability_check: false
+  run_block_proposal_check: false
+  tests:
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-same-pubkey-spam.yaml"
+      config:
+        invalidDeposits: 8192   # raise to 50000+ to burn more ETH
+        batchSize: 220
+        pendingBatches: 32      # ~8192 deposits per block
+        perSlot: 8192
+        depositAmount: 1
+        skipForkActivationCheck: false
+
+dora_params:
+  image: ethpandaops/dora:master

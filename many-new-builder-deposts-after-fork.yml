@@ -8,10 +8,10 @@ participants_matrix:
       el_image: ethpandaops/geth:bal-devnet-6
       el_extra_params: ["--rpc.txfeecap=0", "--rpc.gascap=0"]
   cl:
-    - cl_type: lodestar
-      cl_image: tuyennhv/lodestar:te-improve_onboard_builders
-    #- cl_type: prysm
-    #  cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
+    - cl_type: prysm
+      cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
+    #- cl_type: lodestar
+    #  cl_image: tuyennhv/lodestar:te-improve_onboard_builders
     #- cl_type: teku
     #  cl_image: ethpandaops/teku:glamsterdam-devnet-2
     #- cl_type: lighthouse
