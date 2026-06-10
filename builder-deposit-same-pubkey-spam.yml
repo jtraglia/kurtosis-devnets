@@ -4,11 +4,6 @@
 #   2. one valid 0x03 deposit for that same pubkey
 # At the fork the backlog is processed: invalid same-pubkey deposits burn,
 # the valid one onboards the builder. ETH burned scales with invalidBuilderDeposits.
-#
-# Requires the custom jtraglia/assertoor:reuse-index image. The funding premine
-# must cover ~invalidBuilderDeposits ETH (~50k by default).
-# Timing is tight: everything must be EL-included before the activation slot.
-# With gloas_fork_epoch=1 that is a single epoch — raise it if the fill spills over.
 
 participants_matrix:
   el:
