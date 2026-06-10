@@ -1,12 +1,12 @@
-# Scenario 3.1: post-fork same-pubkey invalid validator deposits, then a valid builder.
-# A variation of scenario 3 (builder-deposit-same-pubkey-spam): instead of invalid
-# 0x03 builder deposits before the fork, this runs entirely POST-GLOAS (starting
-# epoch 1) and spams invalid 0x01 VALIDATOR deposits, in this order:
-#   1. invalidValidatorDeposits invalid 0x01 deposits, all for ONE pubkey
-#   2. one valid 0x03 builder deposit for that same pubkey
-# The invalid validator deposits burn as they process; the valid builder deposit
-# then onboards the builder for that same pubkey. ETH burned scales with
-# invalidValidatorDeposits.
+# Scenario 3.2: post-fork same-pubkey invalid validators -> valid validator -> valid builder.
+# A variation of scenario 3.1: runs entirely POST-GLOAS (starting epoch 1) and drives
+# ONE pubkey through three stages, in this order:
+#   1. invalidValidatorDeposits invalid 0x01 validator deposits (each burned)
+#   2. one valid 0x01 validator deposit  -> onboards the pubkey as a validator
+#   3. one valid 0x03 builder deposit    -> for the same, now-existing-validator pubkey
+# Edge case under test: a deposit for an already-onboarded validator is a balance
+# top-up (sig skipped, creds ignored), so stage 3 should NOT convert the validator
+# into a builder. Checks the client handles this collision without breaking finality.
 
 participants_matrix:
   el:
@@ -34,7 +34,7 @@ assertoor_params:
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-same-pubkey-validator-spam.yaml"
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-same-pubkey-validator-then-builder.yaml"
       config:
         invalidValidatorDeposits: 50000  # invalid 0x01 deposits for one pubkey
         batchSize: 220
