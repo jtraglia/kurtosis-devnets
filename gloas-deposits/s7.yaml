@@ -1,0 +1,45 @@
+# Scenario 7: Same-pubkey invalid validator deposits, pre-filled before the fork.
+# Identical to scenario 3 but the pre-fork flood is invalid 0x01 validator
+# deposits rather than invalid 0x03 builder deposits. Before Gloas activates,
+# fills pending_deposits with 50k invalid 0x01 validator deposits that all
+# target ONE pubkey (each a distinct invalid signature), followed by a single
+# valid 0x03 builder deposit for that same pubkey. At the fork every invalid
+# deposit fails its signature check individually and its ETH is burned; the
+# lone valid deposit onboards the builder.
+
+participants_matrix:
+  el:
+    - el_type: geth
+      el_image: ethpandaops/geth:bal-devnet-6
+      el_extra_params: ["--rpc.txfeecap=0", "--rpc.gascap=0"]
+  cl:
+    - cl_type: prysm
+      cl_image: ethpandaops/prysm-beacon-chain:glamsterdam-devnet-3-deposits
+  count: 1
+
+network_params:
+  gloas_fork_epoch: 1
+  withdrawal_type: "0x01"
+  validator_balance: 40000
+  gas_limit: 250000000
+  genesis_gaslimit: 250000000
+
+additional_services:
+  - dora
+  - assertoor
+
+assertoor_params:
+  image: jtraglia/assertoor:reuse-index
+  run_stability_check: false
+  run_block_proposal_check: false
+  tests:
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/deposits/s7.yaml"
+      config:
+        invalidValidatorDeposits: 50000
+        batchSize: 220
+        pendingBatches: 32
+        perSlot: 8192
+        depositAmount: 1
+
+dora_params:
+  image: ethpandaops/dora:master
