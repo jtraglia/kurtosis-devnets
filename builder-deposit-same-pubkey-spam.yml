@@ -1,8 +1,14 @@
-# Scenario 3: spam invalid same-pubkey builder deposits, then one valid.
-# Fills pending_deposits with N invalid-signature 0x03 deposits that all
-# target ONE pubkey (each with a different invalid sig), then submits a single
-# valid 0x03 deposit for that pubkey. The invalid deposits are burned; the
-# valid one onboards the builder. ETH burned scales with `invalidDeposits`.
+# Scenario 3: pre-fork pending_deposits queue with same-pubkey builder deposits.
+# All submitted in epoch 0, BEFORE the GLOAS fork, in this order:
+#   1. invalidBuilderDeposits invalid 0x03 deposits, all for ONE pubkey
+#   2. one valid 0x03 deposit for that same pubkey
+# At the fork the backlog is processed: invalid same-pubkey deposits burn,
+# the valid one onboards the builder. ETH burned scales with invalidBuilderDeposits.
+#
+# Requires the custom jtraglia/assertoor:reuse-index image. The funding premine
+# must cover ~invalidBuilderDeposits ETH (~50k by default).
+# Timing is tight: everything must be EL-included before the activation slot.
+# With gloas_fork_epoch=1 that is a single epoch — raise it if the fill spills over.
 
 participants_matrix:
   el:
@@ -32,12 +38,11 @@ assertoor_params:
   tests:
     - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/builder-deposit-same-pubkey-spam.yaml"
       config:
-        invalidDeposits: 8192   # raise to 50000+ to burn more ETH
+        invalidBuilderDeposits: 50000  # invalid 0x03 deposits for one pubkey
         batchSize: 220
-        pendingBatches: 32      # ~8192 deposits per block
+        pendingBatches: 32             # ~8192 deposits per block
         perSlot: 8192
         depositAmount: 1
-        skipForkActivationCheck: false
 
 dora_params:
   image: ethpandaops/dora:master
