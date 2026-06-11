@@ -27,11 +27,11 @@ additional_services:
   - assertoor
 
 assertoor_params:
-  image: ethpandaops/assertoor:master
+  image: jtraglia/assertoor
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "https://raw.githubusercontent.com/ethpandaops/assertoor/refs/heads/master/playbooks/gloas-dev/builder-deposit-spam.yaml"
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/master/playbooks/gloas-dev/builder-deposit-spam.yaml"
       config:
         batchSize: 220
         pendingBatches: 32 # 8192 deposits per block

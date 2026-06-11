@@ -27,11 +27,11 @@ additional_services:
   - assertoor
 
 assertoor_params:
-  image: jtraglia/assertoor:reuse-index
+  image: jtraglia/assertoor
   run_stability_check: false
   run_block_proposal_check: false
   tests:
-    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/reuse-index/playbooks/gloas-dev/deposits/s9.yaml"
+    - file: "https://raw.githubusercontent.com/jtraglia/assertoor/refs/heads/master/playbooks/gloas-dev/deposits/s9.yaml"
       config:
         invalidValidatorDeposits: 50000
         finalBuilderDeposits: 128
