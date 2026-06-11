@@ -1,9 +1,11 @@
-# Scenario 5: Same-pubkey invalid validator-deposit flood, then a valid builder.
-# Spams 50k invalid 0x01 validator deposits for ONE pubkey, then submits a
-# single valid 0x03 builder deposit for the same pubkey. The invalid validator
-# deposits are burned as they drain from the queue; the valid builder deposit
-# then onboards the builder. Checks that the long run of invalid same-pubkey
-# validator deposits doesn't poison the later builder onboarding.
+# Scenario 5: Same-pubkey invalid validator deposits, pre-filled before the fork.
+# Identical to scenario 3 but the pre-fork flood is invalid 0x01 validator
+# deposits rather than invalid 0x03 builder deposits. Before Gloas activates,
+# fills pending_deposits with 50k invalid 0x01 validator deposits that all
+# target ONE pubkey (each a distinct invalid signature), followed by a single
+# valid 0x03 builder deposit for that same pubkey. At the fork every invalid
+# deposit fails its signature check individually and its ETH is burned; the
+# lone valid deposit onboards the builder.
 
 participants_matrix:
   el:
@@ -38,7 +40,6 @@ assertoor_params:
         pendingBatches: 32
         perSlot: 8192
         depositAmount: 1
-        skipForkActivationCheck: false
 
 dora_params:
   image: ethpandaops/dora:master

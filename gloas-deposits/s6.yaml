@@ -1,10 +1,9 @@
-# Scenario 6: Builder deposit to an already-onboarded validator.
-# Drives ONE pubkey through three stages: 50k invalid 0x01 validator deposits
-# (burned), then 1 valid 0x01 validator deposit that onboards the pubkey as a
-# regular validator, then 1 valid 0x03 builder deposit for that same pubkey.
-# Because the pubkey is already a validator by then, the builder deposit should
-# be treated as a balance top-up (signature skipped, credentials ignored) — it
-# should NOT convert the validator into a builder.
+# Scenario 6: Same-pubkey invalid validator-deposit flood, then a valid builder.
+# Spams 50k invalid 0x01 validator deposits for ONE pubkey, then submits a
+# single valid 0x03 builder deposit for the same pubkey. The invalid validator
+# deposits are burned as they drain from the queue; the valid builder deposit
+# then onboards the builder. Checks that the long run of invalid same-pubkey
+# validator deposits doesn't poison the later builder onboarding.
 
 participants_matrix:
   el:
